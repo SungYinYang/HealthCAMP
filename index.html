@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Required Meta Tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+        integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
+    <!--Javascript-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <title>Health Camp SPA</title>
+    <style>
+        .vertical-line {
+            margin-left: 5px;
+            margin-right: 5px;
+            width: 2px;
+            background-color: hsl(184, 100%, 60%);
+            height: inherit;
+        }
+    </style>
+    <script type="text/javascript" src="./js/script.js"></script>
+
+<body>
+    <div class="container my-5">
+        <!-- display nav bar -->
+        <nav class="navbar m-2" style="background-color:rgb(3, 3, 27)">
+            <span class="navbar-brand mb-0 h1" style="color:mintcream">Health Camp SPA</span>
+            <div class="nav nav-pills" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active text-white" id="nav-demo-tab" data-toggle="tab"
+                    href="#nav-demographic" role="tab" aria-controls="nav-demographic"
+                    aria-selected="true">Demographics</a>
+                <a class="nav-item nav-link text-white" id="nav-health-tab" data-toggle="tab" href="#nav-health"
+                    role="tab" aria-controls="nav-health" aria-selected="false">Health Vitals</a>
+                <a class="nav-item nav-link text-white" id="nav-report-tab" data-toggle="tab" href="#nav-report"
+                    role="tab" aria-controls="nav-report" aria-selected="false">Reports</a>
+            </div>
+        </nav>
+
+        <!-- the place that control all the tab -->
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-demographic" role="tabpanel" aria-labelledby="nav-demo-tab">
+                <div class="container">
+                    <div class="row my-2 p-1">
+                        <div class="card card-body col-md-7 text-right border-0">
+                            <div class="row my-2">
+                                <label class="col-md-4 control-label" for="firstName">First Name:</label>
+                                <input class="col-md-8 form-control" type="text" name="firstName" id="firstName"
+                                    required />
+                            </div>
+
+                            <div class="row my-2">
+                                <label class="col-md-4 control-label" for="lastName">Last Name:</label>
+                                <input class="col-md-8 form-control" type="text" name="lastName" id="lastName"
+                                    required />
+                            </div>
+
+                            <div class="row my-2">
+                                <label class="col-md-4" for="gender">Gender:</label>
+                                <select class="col-md-4 form-control" id="gender" name="gender"
+                                    placeholder="Choose Gender">
+                                    <option value="Male"> Male</option>
+                                    <option value="Female"> Female</option>
+                                    <option value="Other"> Other</option>
+                                </select>
+                            </div>
+
+                            <div class="row my-2">
+                                <label class="col-md-4 control-label " for="age">Age:</label>
+                                <input class="col-md-8 form-control" type="number" name="age" id="age" min="1"
+                                    required />
+                            </div>
+
+                            <div class="row my-2">
+                                <label class="col-md-4" for="note">Notes or Other details:</label>
+                                <input class="col-md-8 form-control" type="text" name="note" id="note" required />
+                            </div>
+
+                            <div class="row my-4">
+                                <div class="col text-center">
+                                    <button id="savebutton" class="btn btn-success btn-xl col-md-4"
+                                        onclick="storeInfo();">Save</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="vertical-line">
+
+                        </div>
+                        <div class="card card-body col-md-3 mt-5 ml-5 text-center border-0 h-100">
+                            <!-- camera -->
+                            <video id="player" autoplay></video>
+                            <div id="capture" class="btn-info rounded">
+                                <i class="fas fa-2x fa-camera"></i>
+                            </div>
+                            <canvas id="canvas" width=800 height=500></canvas>
+                            <script>
+                                const player = document.getElementById('player');
+                                const canvas = document.getElementById('canvas');
+                                const context = canvas.getContext('2d');
+                                const captureButton = document.getElementById('capture');
+
+                                var has_camera_permission = false; //does not have camera permission at page_load
+
+                                const constraints = {
+                                    video: true,
+                                };
+
+                                captureButton.addEventListener('click', () => {
+                                    // Attach the video stream to the video element and autoplay.
+                                    if (!has_camera_permission) {
+                                        navigator.mediaDevices.getUserMedia(constraints)
+                                            .then((stream) => {
+                                                has_camera_permission = true;
+                                                player.srcObject = stream;
+                                            });
+                                    }
+                                    // Draw the video frame to the canvas.
+                                    context.drawImage(player, 0, 0);
+                                    imgURL = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                                    localStorage.setItem('imgData', imgURL);
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Health vital     Tab-->
+            <div class="tab-pane fade" id="nav-health" role="tabpanel" aria-labelledby="nav-health-tab">
+                <div class="container">
+                    <div class="row my-2 p-2">
+                        <div class="card card-body col-md-8 text-right border-0">
+
+                            <div class="row my-2">
+                                <label class="col-md-4 control-label " for="height">Height:</label>
+                                <input class="col-md-8 form-control" type="number" name="height" id="height" min="0"
+                                    required />
+                            </div>
+
+                            <div class="row my-2">
+                                <label class="col-md-4 control-label" for="weight">Weight:</label>
+                                <input class="col-md-8 form-control" type="number" name="weight" id="weight" min="0"
+                                    required />
+                            </div>
+
+                            <div class="row my-2">
+                                <label class="col-md-4 control-label" for="BT">Body
+                                    Temperature:</label>
+                                <input class="col-md-8 form-control" type="number" name="BT" id="BT" min="0" required />
+                            </div>
+
+                            <div class="row my-2">
+                                <label class="col-md-4 control-label" for="PR">Pulse Rate:</label>
+                                <input class="col-md-8 form-control" type="number" name="PR" id="PR" min="0" required />
+                            </div>
+
+                            <div class="row my-2">
+                                <label class="col-md-4" for="BP">BP:</label>
+                                <input class="col-md-8 form-control" type="text" name="BP" id="BP" required />
+                            </div>
+
+                            <!-- type additional submit button -->
+                            <div class="row my-4">
+                                <div class="col text-center">
+                                    <button type="submit" id="savebutton" class="btn btn-success btn-xl col-md-4"
+                                        onclick="storeInfo2();">Save</button>
+                                </div>
+                            </div>
+
+                            <!-- add vertical line -->
+                        </div>
+                        <div class="vertical-line">
+
+                        </div>
+                        <div class="card card-body col-md-3 text-left border-0 h-100">
+                            <div class="row my-1">
+                                <label for="medi">Medications:</label>
+                                <textarea class="col-md-12 form-control" rows="4" name="medi" id="medi"
+                                    required></textarea>
+                            </div>
+                            <div class="row my-1">
+                                <label for="medi_notes">Notes:</label>
+                                <textarea class="col-md-12 form-control" rows="4" name="medi_notes" id="medi_notes"
+                                    required></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Reports   Tab-->
+            <div class="tab-pane fade" id="nav-report" role="tabpanel" aria-labelledby="nav-report-tab">
+                <div class=" container my-2">
+                    <table class="table table-bordered table-striped m-1 p-5" id="patient_table">
+                        <thead>
+                            <tr class="table-primary text-justify text-white">
+                                <th scope="row" colspan="6">Patient Details</th>
+                            </tr>
+                            <tr style="background-color:rgb(59, 110, 204) ">
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Photo</th>
+                                <th>Medications</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script>
+        showTable();
+    </script>
+</body>
+
+</html>
